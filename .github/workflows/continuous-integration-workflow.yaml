@@ -1,0 +1,20 @@
+name: Continuous integration
+on: [push, pull_request]
+
+jobs:
+    build-unix:
+        name: Build Unixes
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-18.04, macOS-10.14]
+        steps:
+            - uses: actions/checkout@v1
+              with:
+                  fetch-depth: 1
+            - name: configure
+              run: cmake .
+            - name: make
+              run: make
+            - name: make install
+              run: make install
