@@ -125,6 +125,7 @@ macro(add_glamoroustoolkit_third_party_dependency NAME TARGETPATH)
             "https://dl.feenk.com/${NAME}/${PLATNAME}/development/x86_64/${LIBPREFIX}${NAME}${LIBSUFFIX}"
             ${TARGETPATH} ${LIBPREFIX}${NAME}${LIBSUFFIX})
     endif()
+endmacro()
 
 macro(add_third_party_dependency NAME TARGETPATH)
 
