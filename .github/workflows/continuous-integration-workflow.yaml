@@ -11,20 +11,65 @@ jobs:
                     - os: ubuntu-18.04
                       appname: Pharo
                       vmExecutable: pharo
+                      platform: linux
                     - os: macos-latest
                       appname: Pharo
                       vmExecutable: Pharo
+                      platform: mac
         env:
             APPNAME: ${{matrix.variant.appname}}
             VM_EXECUTABLE_NAME: ${{ matrix.variant.vmExecutable }}
             CC: clang
             CXX: clang++
+            PKG_CONFIG_PATH: "${GITHUB_WORKSPACE}/openssl-1.1.1g/lib/pkgconfig:${GITHUB_WORKSPACE}/libssh2/lib/pkgconfig:${GITHUB_WORKSPACE}/libgit2/lib/pkgconfig"
         steps:
             - name: Install dependencies
               if: matrix.variant.os == 'ubuntu-18.04'
               run: sudo apt-get install uuid-dev
 
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v2
+
+            - name: Retrieve openssl libraries (ubuntu)
+              if: matrix.variant.platform == 'linux'
+              run: |
+                wget https://github.com/feenkcom/libssl_build/releases/download/v1.1.1g-ubuntu-18.04/libssl-dev-ubuntu-18.04.zip
+                unzip libssl-dev-ubuntu-18.04.zip
+
+            - name: Retrieve openssl libraries (mac)
+              if: matrix.variant.platform == 'mac'
+              run: |
+                wget https://github.com/feenkcom/libssl_build/releases/download/v1.1.1g-macos-latest/libssl-dev-macos-latest.zip
+                unzip libssl-dev-macos-latest.zip
+
+            - name: Retrieve libssh2 libraries (ubuntu)
+              if: matrix.variant.platform == 'linux'
+              run: |
+                wget https://github.com/feenkcom/libssh2_build/releases/download/v.1.9.0-linux/libssh2-dev-linux.zip
+                unzip libssh2-dev-linux.zip
+
+            - name: Retrieve libssh2 libraries (mac)
+              if: matrix.variant.platform == 'mac'
+              run: |
+                wget https://github.com/feenkcom/libssh2_build/releases/download/v.1.9.0-mac/libssh2-dev-mac.zip
+                unzip libssh2-dev-mac.zip
+
+            - name: Retrieve libgit2 libraries (ubuntu)
+              if: matrix.variant.platform == 'linux'
+              run: |
+                wget https://github.com/feenkcom/libgit2_build/releases/download/v0.25.1-linux/libgit2-dev-linux.zip
+                unzip libgit2-dev-linux.zip
+
+            - name: Retrieve libgit2 libraries (mac)
+              if: matrix.variant.platform == 'mac'
+              run: |
+                wget https://github.com/feenkcom/libgit2_build/releases/download/v0.25.1-mac/libgit2-dev-mac.zip
+                unzip libgit2-dev-mac.zip
+
+            - name: Confirm packages
+              run: |
+                pkg-config --modversion libssh2
+                pkg-config --modversion libgit2
+                pkg-config --modversion libssl
 
             - name: CMake configuration
               run: |
@@ -32,14 +77,21 @@ jobs:
                 cd build
                 cmake .. -DAPPNAME=$APPNAME -DVM_EXECUTABLE_NAME=$VM_EXECUTABLE_NAME
 
-            - name: make
-              run: cd build && make
-            - name: make install
-              run: cd build && make install
+            - name: Build
+              run: |
+                cd build
+                cmake --build .
+
+            - name: Install
+              run: |
+                cd build
+                cmake --install .
+                make install
 
             - name: Package artifacts
               run: |
                 cd build
+                cmake --package .
                 make package
                 mkdir -p ../artifacts
                 cp -f build/packages/*.zip build/packages/*.sha1 ../artifacts
@@ -59,59 +111,3 @@ jobs:
                   name: test-results
                   path: test-results
 
-    build-windows-cygwin:
-        name: Build Windows Cygwin
-        runs-on: windows-2016
-        strategy:
-            matrix:
-                variant:
-                    - appname: Pharo
-                      vmExecutable: Pharo
-        env:
-            APPNAME: ${{matrix.variant.appname}}
-            VM_EXECUTABLE_NAME: ${{ matrix.variant.vmExecutable }}
-        steps:
-            - uses: actions/checkout@v1
-
-            - name: Install Cygwin
-              run: .\scripts\installCygwin.ps1 "setup-x86_64.exe" x86_64
-
-            - name: CMake configuration
-              run: |
-                mkdir -p build
-                cd build
-                cmake .. -DAPPNAME=$APPNAME -DVM_EXECUTABLE_NAME=$VM_EXECUTABLE_NAME
-              shell: pwsh.exe -File .\scripts\runScriptInCygwinBash.ps1 {0}
-
-            - name: make
-              run: cd build && make
-              shell: pwsh.exe -File .\scripts\runScriptInCygwinBash.ps1 {0}
-            - name: make install
-              run: cd build && make install
-              shell: pwsh.exe -File .\scripts\runScriptInCygwinBash.ps1 {0}
-
-            - name: Package artifacts
-              run: |
-                cd build
-                make package
-                mkdir -p ../artifacts
-                cp -f build/packages/*.zip build/packages/*.sha1 ../artifacts
-              shell: pwsh.exe -File .\scripts\runScriptInCygwinBash.ps1 {0}
-
-            - name: Upload artifacts
-              uses: actions/upload-artifact@v1
-              with:
-                  name: build-artifacts
-                  path: artifacts
-
-            - name: Run tests
-              continue-on-error: true
-              run: scripts/runTests.sh
-              shell: pwsh.exe -File .\scripts\runScriptInCygwinBash.ps1 {0}
-
-            - name: Upload test results
-              continue-on-error: true
-              uses: actions/upload-artifact@v1
-              with:
-                  name: test-results
-                  path: test-results

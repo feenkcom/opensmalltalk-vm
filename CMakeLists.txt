@@ -11,6 +11,8 @@ set(VERSION_PATCH 2)
 
 set(APPNAME Pharo CACHE STRING "VM Application name")
 
+find_package(PkgConfig REQUIRED)
+
 get_commit_hash(GIT_COMMIT_HASH)
 get_git_describe(GIT_DESCRIBE)
 get_git_date(GIT_COMMIT_DATE)
@@ -324,6 +326,10 @@ include(plugins.cmake)
 # Handling Third party dependencies
 
 add_third_party_dependencies_per_platform()
+pkg_check_modules(OPENSSL openssl)
+pkg_check_modules(LIBSSH2 libssh2)
+pkg_check_modules(LIBGIT2 libgit2)
+
 
 # Selecting files to include in the package
 
