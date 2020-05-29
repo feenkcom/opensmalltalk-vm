@@ -65,6 +65,13 @@ jobs:
                 wget https://github.com/feenkcom/libgit2_build/releases/download/v0.25.1-mac/libgit2-dev-mac.zip
                 unzip libgit2-dev-mac.zip
 
+            - name: Find libraries
+              run: |
+                echo "PKG_CONFIG_PATH: ${PKG_CONFIG_PATH}"
+                ls -l ${GITHUB_WORKSPACE}/openssl-1.1.1g/lib/pkgconfig
+                ls -l ${GITHUB_WORKSPACE}/libssh2/lib/pkgconfig
+                ls -l ${GITHUB_WORKSPACE}/libgit2/lib/pkgconfig
+
             - name: Confirm packages
               run: |
                 pkg-config --modversion libssh2
