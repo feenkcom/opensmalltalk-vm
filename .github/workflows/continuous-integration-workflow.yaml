@@ -71,12 +71,6 @@ jobs:
                 ls -l ${GITHUB_WORKSPACE}/libssh2/lib/pkgconfig
                 ls -l ${GITHUB_WORKSPACE}/libgit2/lib/pkgconfig
 
-            - name: Confirm packages
-              run: |
-                pkg-config --modversion libssh2
-                pkg-config --modversion libgit2
-                pkg-config --modversion libssl
-
             - name: CMake configuration
               run: |
                 mkdir -p build
