@@ -8,10 +8,10 @@ jobs:
         strategy:
             matrix:
                 variant:
-                    - os: ubuntu-18.04
+                    - os: macos-latest
                       appname: Pharo
-                      vmExecutable: pharo
-                      platform: linux
+                      vmExecutable: Pharo
+                      platform: mac
         env:
             APPNAME: ${{matrix.variant.appname}}
             VM_EXECUTABLE_NAME: ${{ matrix.variant.vmExecutable }}
@@ -81,6 +81,13 @@ jobs:
               run: |
                 cd build
                 cmake --build .
+
+            - name: Update libraries (mac)
+              if: matrix.variant.platform == 'mac'
+              run: |
+                cp -v openssl-1.1.1g/lib/lib*dylib* build/build/vm/
+                cp -v libssh2/lib/lib*dylib* build/build/vm/
+                cp -v libgit2/lib/lib*dylib* build/build/vm/
 
             - name: Update libraries (linux)
               if: matrix.variant.platform == 'linux'
