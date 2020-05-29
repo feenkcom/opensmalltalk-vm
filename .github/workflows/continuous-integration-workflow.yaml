@@ -65,6 +65,9 @@ jobs:
                 wget https://github.com/feenkcom/libgit2_build/releases/download/v0.25.1-mac/libgit2-dev-mac.zip
                 unzip libgit2-dev-mac.zip
 
+            - name: Top directory
+              run: ls -l ${GITHUB_WORKSPACE}
+
             - name: Find libraries
               run: |
                 echo "PKG_CONFIG_PATH: ${PKG_CONFIG_PATH}"
