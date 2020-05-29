@@ -17,7 +17,7 @@ jobs:
             VM_EXECUTABLE_NAME: ${{ matrix.variant.vmExecutable }}
             CC: clang
             CXX: clang++
-            PKG_CONFIG_PATH: "${GITHUB_WORKSPACE}/openssl-1.1.1g/lib/pkgconfig:${GITHUB_WORKSPACE}/libssh2/lib/pkgconfig:${GITHUB_WORKSPACE}/libgit2/lib/pkgconfig"
+            PKG_CONFIG_PATH: ${GITHUB_WORKSPACE}/openssl-1.1.1g/lib/pkgconfig:${GITHUB_WORKSPACE}/libssh2/lib/pkgconfig:${GITHUB_WORKSPACE}/libgit2/lib/pkgconfig
         steps:
             - name: Install dependencies
               if: matrix.variant.os == 'ubuntu-18.04'
