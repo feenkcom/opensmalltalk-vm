@@ -82,6 +82,13 @@ jobs:
                 cd build
                 cmake --build .
 
+            - name: Update libraries (linux)
+              if: matrix.variant.platform == 'linux'
+              run: |
+                cp -v openssl-1.1.1g/lib/lib*so* build/build/vm/
+                cp -v libssh2/lib/lib*so* build/build/vm/
+                cp -v libgit2/lib/lib*so* build/build/vm/
+
             - name: Install
               run: |
                 cd build
@@ -101,13 +108,13 @@ jobs:
                   name: build-artifacts
                   path: artifacts
 
-            - name: Run tests
-              continue-on-error: true
-              run: scripts/runTests.sh
-            - name: Upload test results
-              continue-on-error: true
-              uses: actions/upload-artifact@v1
-              with:
-                  name: test-results
-                  path: test-results
+            #- name: Run tests
+              #continue-on-error: true
+              #run: scripts/runTests.sh
+            #- name: Upload test results
+              #continue-on-error: true
+              #uses: actions/upload-artifact@v1
+              #with:
+                  #name: test-results
+                  #path: test-results
 
