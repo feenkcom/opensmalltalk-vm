@@ -19,9 +19,13 @@ jobs:
             CXX: clang++
             PKG_CONFIG_PATH: ${GITHUB_WORKSPACE}/openssl-1.1.1g/lib/pkgconfig:${GITHUB_WORKSPACE}/libssh2/lib/pkgconfig:${GITHUB_WORKSPACE}/libgit2/lib/pkgconfig
         steps:
-            - name: Install dependencies
+            - name: Install dependencies (linux)
               if: matrix.variant.os == 'ubuntu-18.04'
               run: sudo apt-get install uuid-dev
+
+            - name: Install dependencies (mac)
+              if: matrix.variant.platform == 'mac'
+              run: brew install pkg-config
 
             - uses: actions/checkout@v2
 
