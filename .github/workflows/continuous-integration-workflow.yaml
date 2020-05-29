@@ -89,6 +89,7 @@ jobs:
             - name: Update libraries (mac)
               if: matrix.variant.platform == 'mac'
               run: |
+                find build/build/vm
                 cp -v openssl-1.1.1g/lib/lib*dylib* build/build/vm/
                 cp -v libssh2/lib/lib*dylib* build/build/vm/
                 cp -v libgit2/lib/lib*dylib* build/build/vm/
