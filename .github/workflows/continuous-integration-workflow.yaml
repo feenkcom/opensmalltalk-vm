@@ -90,9 +90,9 @@ jobs:
               if: matrix.variant.platform == 'mac'
               run: |
                 find build/build/vm
-                cp -v openssl-1.1.1g/lib/lib*dylib* build/build/vm/
-                cp -v libssh2/lib/lib*dylib* build/build/vm/
-                cp -v libgit2/lib/lib*dylib* build/build/vm/
+                cp -v openssl-1.1.1g/lib/lib*dylib* build/build/vm/Pharo.app/Contents/MacOS/Plugins/
+                cp -v libssh2/lib/lib*dylib* build/build/vm/Pharo.app/Contents/MacOS/Plugins/
+                cp -v libgit2/lib/lib*dylib* build/build/vm/Pharo.app/Contents/MacOS/Plugins/
 
             - name: Update libraries (linux)
               if: matrix.variant.platform == 'linux'
