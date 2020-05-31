@@ -15,7 +15,7 @@ jobs:
                     - os: macos-latest
                       appname: GlamorousToolkit
                       vmExecutable: GlamorousToolkit
-                      platform: linux
+                      platform: mac
         env:
             APPNAME: ${{matrix.variant.appname}}
             VM_EXECUTABLE_NAME: ${{ matrix.variant.vmExecutable }}
@@ -23,14 +23,14 @@ jobs:
             SIGNING_IDENTITY: 'Developer ID Application: feenk gmbh (77664ZXL29)'
             PKG_CONFIG_PATH: ${GITHUB_WORKSPACE}/openssl-1.1.1g/lib/pkgconfig:${GITHUB_WORKSPACE}/libssh2/lib/pkgconfig:${GITHUB_WORKSPACE}/libgit2/lib/pkgconfig
         steps:
-            - name: Install dependencies
+            - name: Install dependencies (linux)
               if: matrix.variant.os == 'ubuntu-18.04'
               run: |
                 sudo apt-get update
                 sudo apt-get install uuid-dev
 
             - name: Install dependencies (mac)
-              if: matrix.variant.platform == 'mac'
+              if: matrix.variant.os == 'macos-latest'
               run: brew install pkg-config
 
             - uses: actions/checkout@v2

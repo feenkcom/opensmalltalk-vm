@@ -19,6 +19,7 @@ echo "Installing Cygwin packages"
     -P cmake `
     -P zip `
     -P mingw64-$cygwinArch-clang `
+    -P mingw64-$cygwinArch-pkg-config `
     -P unzip `
     -P wget `
     -P git `
