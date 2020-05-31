@@ -29,7 +29,6 @@ set(VM_FRONTEND_SOURCES
 
 
 macro(add_third_party_dependencies_per_platform)
-    add_third_party_dependency("PThreadedFFI-1.3.1-linux64" "build/vm")
     add_third_party_dependency("libffi-3.3-rc0" "build/vm")
     add_third_party_dependency("SDL2-2.0.7" "build/vm")
 endmacro()

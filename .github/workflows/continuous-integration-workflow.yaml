@@ -12,10 +12,6 @@ jobs:
                       appname: GlamorousToolkit
                       vmExecutable: glamoroustoolkit
                       platform: linux
-                    - os: macos-latest
-                      appname: GlamorousToolkit
-                      vmExecutable: GlamorousToolkit
-                      platform: mac
         env:
             APPNAME: ${{matrix.variant.appname}}
             VM_EXECUTABLE_NAME: ${{ matrix.variant.vmExecutable }}
@@ -71,6 +67,21 @@ jobs:
                 wget https://github.com/feenkcom/libgit2_build/releases/download/v0.25.1-mac/libgit2-dev-mac.zip
                 unzip libgit2-dev-mac.zip
 
+            - name: Retrieve libPThreaded library (linux)
+              if: matrix.variant.platform == 'linux'
+              run: |
+                wget https://github.com/feenkcom/threadedFFI-Plugin/releases/download/libPThreaded-linux/libPThreaded-linux.zip
+                unzip libPThreaded-linux.zip
+                mkdir libPThreaded
+                cd libPThreaded
+                unzip ../libPThreaded-linux.zip
+
+            - name: Retrieve libPThreaded library (mac)
+              if: matrix.variant.platform == 'mac'
+              run: |
+                wget 
+                unzip 
+
             - name: CMake configuration
               run: |
                 mkdir -p build
@@ -88,6 +99,7 @@ jobs:
                 cp -v openssl-1.1.1g/lib/lib*dylib* build/build/vm/${{ matrix.variant.appname }}.app/Contents/MacOS/Plugins/
                 cp -v libssh2/lib/lib*dylib* build/build/vm/${{ matrix.variant.appname }}.app/Contents/MacOS/Plugins/
                 cp -v libgit2/lib/lib*dylib* build/build/vm/${{ matrix.variant.appname }}.app/Contents/MacOS/Plugins/
+                cp -v libPThreaded/lib*dylib* build/build/vm/${{ matrix.variant.appname }}.app/Contents/MacOS/Plugins/
 
             - name: Update libraries (linux)
               if: matrix.variant.platform == 'linux'
@@ -95,6 +107,7 @@ jobs:
                 cp -v openssl-1.1.1g/lib/lib*so* build/build/vm/
                 cp -v libssh2/lib/lib*so* build/build/vm/
                 cp -v libgit2/lib/lib*so* build/build/vm/
+                cp -v libPThreaded/lib*so* build/build/vm/
 
             - name: Install
               run: |

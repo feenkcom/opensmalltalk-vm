@@ -55,7 +55,6 @@ macro(add_third_party_dependencies_per_platform)
     add_third_party_dependency("freetype-2.9.1" ${LIBRARY_OUTPUT_DIRECTORY})
     add_third_party_dependency("libffi-3.3-rc0" ${LIBRARY_OUTPUT_DIRECTORY})
     add_third_party_dependency("libpng-1.2.49" ${LIBRARY_OUTPUT_DIRECTORY})
-    add_third_party_dependency("PThreadedFFI-1.3.1-osx64" ${LIBRARY_OUTPUT_DIRECTORY})
     add_third_party_dependency("SDL2-2.0.7" ${LIBRARY_OUTPUT_DIRECTORY})
 
 endmacro()
