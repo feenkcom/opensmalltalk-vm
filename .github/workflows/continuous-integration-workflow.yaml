@@ -12,6 +12,10 @@ jobs:
                       appname: GlamorousToolkit
                       vmExecutable: glamoroustoolkit
                       platform: linux
+                    - os: macos-latest
+                      appname: GlamorousToolkit
+                      vmExecutable: GlamorousToolkit
+                      platform: mac
         env:
             APPNAME: ${{matrix.variant.appname}}
             VM_EXECUTABLE_NAME: ${{ matrix.variant.vmExecutable }}
@@ -80,8 +84,12 @@ jobs:
             - name: Retrieve libPThreaded library (mac)
               if: matrix.variant.platform == 'mac'
               run: |
-                wget 
-                unzip 
+                wget https://github.com/feenkcom/threadedFFI-Plugin/releases/download/libPThreaded-mac/libPThreaded-mac.zip
+                unzip libPThreaded-mac.zip
+                mkdir libPThreaded
+                cd libPThreaded
+                unzip ../libPThreaded-mac.zip
+                unzip PThreadedFFI-1.3.1-osx64.zip
 
             - name: CMake configuration
               run: |
