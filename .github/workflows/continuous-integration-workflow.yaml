@@ -81,12 +81,9 @@ jobs:
             - name: Update libraries (mac)
               if: matrix.variant.platform == 'mac'
               run: |
-                find openssl-1.1.1g
-                cp -v openssl-1.1.1g/lib/lib*dylib* build/build/vm/Pharo.app/Contents/MacOS/Plugins/
-                find libssh2
-                cp -v libssh2/lib/lib*dylib* build/build/vm/Pharo.app/Contents/MacOS/Plugins/
-                find libgit2
-                cp -v libgit2/lib/lib*dylib* build/build/vm/Pharo.app/Contents/MacOS/Plugins/
+                cp -v openssl-1.1.1g/lib/lib*dylib* build/build/vm/${{ matrix.variant.appname }}.app/Contents/MacOS/Plugins/
+                cp -v libssh2/lib/lib*dylib* build/build/vm/${{ matrix.variant.appname }}.app/Contents/MacOS/Plugins/
+                cp -v libgit2/lib/lib*dylib* build/build/vm/${{ matrix.variant.appname }}.app/Contents/MacOS/Plugins/
 
             - name: Update libraries (linux)
               if: matrix.variant.platform == 'linux'
