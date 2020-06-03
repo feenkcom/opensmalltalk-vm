@@ -38,14 +38,14 @@ jobs:
             - name: Retrieve openssl libraries (ubuntu)
               if: matrix.variant.platform == 'linux'
               run: |
-                wget https://github.com/feenkcom/libssl_build/releases/download/v1.1.1g-ubuntu-18.04/libssl-dev-ubuntu-18.04.zip
-                unzip libssl-dev-ubuntu-18.04.zip
+                wget https://github.com/feenkcom/libssl_build/releases/download/v1.1.1g-linux/libssl-dev-linux.zip
+                unzip libssl-dev-linux.zip
 
             - name: Retrieve openssl libraries (mac)
               if: matrix.variant.platform == 'mac'
               run: |
-                wget https://github.com/feenkcom/libssl_build/releases/download/v1.1.1g-macos-latest/libssl-dev-macos-latest.zip
-                unzip libssl-dev-macos-latest.zip
+                wget https://github.com/feenkcom/libssl_build/releases/download/v1.1.1g-mac/libssl-dev-mac.zip
+                unzip libssl-dev-mac.zip
 
             - name: Retrieve libssh2 libraries (ubuntu)
               if: matrix.variant.platform == 'linux'
@@ -204,4 +204,3 @@ jobs:
                   name: test-results
                   path: test-results
 
-# Update libgit2 2020-06-02 08:37
