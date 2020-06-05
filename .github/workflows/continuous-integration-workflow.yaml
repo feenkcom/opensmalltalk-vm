@@ -75,7 +75,6 @@ jobs:
               if: matrix.variant.platform == 'linux'
               run: |
                 wget https://github.com/feenkcom/threadedFFI-Plugin/releases/download/libPThreaded-linux/libPThreaded-linux.zip
-                unzip libPThreaded-linux.zip
                 mkdir libPThreaded
                 cd libPThreaded
                 unzip ../libPThreaded-linux.zip
@@ -85,7 +84,6 @@ jobs:
               if: matrix.variant.platform == 'mac'
               run: |
                 wget https://github.com/feenkcom/threadedFFI-Plugin/releases/download/libPThreaded-mac/libPThreaded-mac.zip
-                unzip libPThreaded-mac.zip
                 mkdir libPThreaded
                 cd libPThreaded
                 unzip ../libPThreaded-mac.zip
@@ -164,6 +162,17 @@ jobs:
             - name: Install Cygwin
               run: .\scripts\installCygwin.ps1 "setup-x86_64.exe" x86_64
 
+            - name: Retrieve libPThreaded library
+              run: |
+                wget https://github.com/feenkcom/threadedFFI-Plugin/releases/download/libPThreaded-win64/libPThreaded-win64.zip
+                mkdir libPThreaded
+                cd libPThreaded
+                unzip ../libPThreaded-win64.zip
+                unzip PThreadedFFI-1.3.1-win64.zip
+                pwd
+                ls -l
+              shell: pwsh.exe -File .\scripts\runScriptInCygwinBash.ps1 {0}
+
             - name: CMake configuration
               run: |
                 mkdir -p build
@@ -171,10 +180,17 @@ jobs:
                 cmake .. -DAPPNAME=$APPNAME -DVM_EXECUTABLE_NAME=$VM_EXECUTABLE_NAME
               shell: pwsh.exe -File .\scripts\runScriptInCygwinBash.ps1 {0}
 
-            - name: make
+            - name: Build
               run: cd build && make
               shell: pwsh.exe -File .\scripts\runScriptInCygwinBash.ps1 {0}
-            - name: make install
+
+            - name: Update libraries
+              run: |
+                find build
+                cp -v libPThreaded/*.dll build/build/vm/
+              shell: pwsh.exe -File .\scripts\runScriptInCygwinBash.ps1 {0}
+
+            - name: Install
               run: cd build && make install
               shell: pwsh.exe -File .\scripts\runScriptInCygwinBash.ps1 {0}
 
